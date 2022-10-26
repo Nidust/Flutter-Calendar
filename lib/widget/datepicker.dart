@@ -31,13 +31,13 @@ class _DatePickerState extends State<DatePicker> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Label
-        Text(
-          widget.label,
-          style: const TextStyle(color: AppColor.noonSun),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(
+            widget.label,
+            style: const TextStyle(color: AppColor.noonSun),
+          ),
         ),
-
-        // Spacing
-        const SizedBox(height: 5.0),
 
         // TextField
         Container(
@@ -47,7 +47,6 @@ class _DatePickerState extends State<DatePicker> {
           child: TextField(
             readOnly: true,
             controller: _controller,
-            onSubmitted: widget.onSubmitted,
             onTap: () async {
               DateTime? pickedDate = await showDialog<DateTime>(
                 context: context,
@@ -66,6 +65,8 @@ class _DatePickerState extends State<DatePicker> {
                 setState(() {
                   _controller.text = formattedDate;
                 });
+
+                widget.onSubmitted(_controller.text);
               }
             },
             decoration: const InputDecoration(
