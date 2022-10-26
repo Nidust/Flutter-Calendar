@@ -153,11 +153,11 @@ class _SchdulerTile extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Wrap(
                 spacing: 10,
+                direction: Axis.vertical,
                 crossAxisAlignment: WrapCrossAlignment.start,
                 children: [
                   Text(
                     "${DateFormat("MM/dd").format(schdule.startDay)} ~ ${DateFormat("MM/dd").format(schdule.endDay)}",
-                    maxLines: null,
                   ),
                   Text(
                     schdule.title,
