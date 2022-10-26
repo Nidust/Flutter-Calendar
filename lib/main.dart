@@ -1,8 +1,10 @@
 import 'package:calendar_scheduler/styles.dart';
+import 'package:calendar_scheduler/widget/schdule.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'page/calendar.dart';
+import 'widget/calendar.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,13 +12,14 @@ void main() {
   // 가로 모드 허용하지 않음.
   SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
-  ).then((_) => runApp(const MyApp()));
+  ).then((_) => runApp(MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
-  // This widget is the root of your application.
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     final theme = ThemeData(
@@ -29,7 +32,15 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: theme,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('ko', 'KR'),
+      ],
       home: Scaffold(
+        key: scaffoldKey,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
@@ -37,11 +48,24 @@ class MyApp extends StatelessWidget {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          tooltip: "추가하기",
+          onPressed: () => _addSchedule(scaffoldKey.currentContext!),
+          tooltip: "스케줄 추가하기",
           child: const Icon(Icons.add),
         ),
       ),
+    );
+  }
+
+  void _addSchedule(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (context) {
+        return Container(
+          width: double.maxFinite,
+          color: Colors.white,
+          child: const SchduleDialog(),
+        );
+      },
     );
   }
 }
