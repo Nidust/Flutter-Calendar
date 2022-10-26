@@ -108,15 +108,19 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text("${widget.title} 선택"),
-      content: Calendar(
-        fontSize: 10.0,
-        borderRadius: 3.0,
-        spacing: 3.0,
-        onDaySelected: (selectedDay) {
-          setState(() {
-            pickedDate = selectedDay;
-          });
-        },
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.5,
+        height: MediaQuery.of(context).size.height * 0.8,
+        child: Calendar(
+          fontSize: 10.0,
+          borderRadius: 3.0,
+          spacing: 3.0,
+          onDaySelected: (selectedDay) {
+            setState(() {
+              pickedDate = selectedDay;
+            });
+          },
+        ),
       ),
       titlePadding: const EdgeInsets.only(
         left: 24.0,

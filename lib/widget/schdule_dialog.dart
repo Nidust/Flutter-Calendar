@@ -23,7 +23,7 @@ class _SchduleDialogState extends State<SchduleDialog> {
       children: [
         // 시간 설정
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // 시작 시간
             Padding(
