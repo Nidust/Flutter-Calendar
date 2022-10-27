@@ -33,7 +33,7 @@ class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
     return TableCalendar(
-      locale: 'ko-KR',
+      locale: 'ko',
       firstDay: kFirstDay,
       lastDay: kLastDay,
       focusedDay: _focusedDay,

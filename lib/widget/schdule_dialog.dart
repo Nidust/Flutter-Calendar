@@ -85,6 +85,7 @@ class _SchduleDialogState extends State<SchduleDialog> {
                   Navigator.pop(
                     context,
                     Schdule(
+                      id: 0,
                       startDay: _startDay!,
                       endDay: _endDay!,
                       title: _contents!,

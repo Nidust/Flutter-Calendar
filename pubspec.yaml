@@ -41,6 +41,9 @@ dependencies:
   intl: ^0.17.0 # 날짜/숫자 형식 포맷 및 언어 현지화 기능을 제공하는 라이브러리
   table_calendar: ^3.0.7 # 캘린더 관련 라이브러리
 
+  sqflite: ^2.2.0 # SQLite 데이터베이스
+  path: ^1.8.2 # 경로를 합칠 때 사용
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

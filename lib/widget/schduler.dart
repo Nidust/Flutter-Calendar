@@ -12,18 +12,49 @@ class Schduler extends StatelessWidget {
   });
 
   final DateTime? selectedDay;
-  final List<Schdule> schduleList;
-  final void Function(int index) onDismissed;
+  final Future<List<Schdule>> schduleList;
+  final void Function(Schdule index) onDismissed;
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: schduleList,
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _SchdulerHeader(
+                  selectedDay: selectedDay,
+                  schduleCount: 0,
+                ),
+                const SizedBox(
+                  width: double.maxFinite,
+                  height: 210,
+                  child: Center(
+                    child: CircularProgressIndicator(color: AppColor.noonSun),
+                  ),
+                ),
+              ],
+            );
+          default:
+            return _renderList(snapshot.data);
+        }
+      },
+    );
+  }
+
+  Widget _renderList(List<Schdule>? data) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _SchdulerHeader(
           selectedDay: selectedDay,
-          schduleCount: schduleList.length,
+          schduleCount: data == null ? 0 : data.length,
         ),
         SizedBox(
           width: double.maxFinite,
@@ -32,12 +63,11 @@ class Schduler extends StatelessWidget {
             shrinkWrap: true,
             padding: const EdgeInsets.all(0.0),
             scrollDirection: Axis.vertical,
-            itemCount: schduleList.length,
+            itemCount: data == null ? 0 : data.length,
             itemBuilder: (context, index) {
-              var schdule = schduleList[index];
+              var schdule = data![index];
 
               return _SchdulerTile(
-                index: index,
                 schdule: schdule,
                 onDismissed: onDismissed,
               );
@@ -101,14 +131,12 @@ class _SchdulerHeader extends StatelessWidget {
 class _SchdulerTile extends StatelessWidget {
   const _SchdulerTile({
     Key? key,
-    required this.index,
     required this.schdule,
     required this.onDismissed,
   }) : super(key: key);
 
-  final int index;
   final Schdule schdule;
-  final void Function(int index) onDismissed;
+  final void Function(Schdule index) onDismissed;
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +163,7 @@ class _SchdulerTile extends StatelessWidget {
       ),
       onDismissed: (direction) {
         if (direction == DismissDirection.endToStart) {
-          onDismissed(index);
+          onDismissed(schdule);
         }
       },
       confirmDismiss: (DismissDirection dir) async {

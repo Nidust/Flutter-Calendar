@@ -6,7 +6,6 @@ import 'package:calendar_scheduler/widget/schduler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 import 'widget/calendar.dart';
 
@@ -28,7 +27,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final _schduleList = <Schdule>[];
   DateTime? _selectedDay = kToday;
 
   @override
@@ -46,6 +44,7 @@ class _MyAppState extends State<MyApp> {
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
         Locale('ko', 'KR'),
@@ -67,24 +66,12 @@ class _MyAppState extends State<MyApp> {
             ),
             Schduler(
               selectedDay: _selectedDay,
-              schduleList: _selectedDay != null
-                  ? _schduleList.where(
-                      (schdule) {
-                        bool isSame =
-                            isSameDay(schdule.startDay, _selectedDay) ||
-                                isSameDay(schdule.endDay, _selectedDay);
-                        bool isBetween =
-                            schdule.startDay.isBefore(_selectedDay!) &&
-                                schdule.endDay.isAfter(_selectedDay!);
-
-                        return isSame || isBetween;
-                      },
-                    ).toList()
-                  : <Schdule>[],
-              onDismissed: (index) {
-                setState(() {
-                  _schduleList.removeAt(index);
-                });
+              schduleList: Future<List<Schdule>>.delayed(
+                const Duration(seconds: 1),
+                () => SchduleDB().select(_selectedDay!),
+              ),
+              onDismissed: (schdule) async {
+                await SchduleDB().delete(schdule);
               },
             ),
           ],
@@ -111,9 +98,7 @@ class _MyAppState extends State<MyApp> {
     );
 
     if (schdule != null) {
-      setState(() {
-        _schduleList.add(schdule);
-      });
+      await SchduleDB().insert(schdule);
     }
   }
 }
